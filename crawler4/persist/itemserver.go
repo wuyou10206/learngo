@@ -10,8 +10,12 @@ func ItemServer() chan interface{} {
 			item := <-out
 			log.Warn("Item Server:got item #%d:%v", itemCount, item)
 			itemCount++
+			save(item)
 		}
 
 	}()
 	return out
+}
+func save(Item interface{}) {
+
 }
