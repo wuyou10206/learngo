@@ -17,7 +17,7 @@ func main() {
 	e := engine.ConcurrentEngine{
 		Scheduler: &scheduler.QueueScheduler{},
 		WorkCount: 100,
-		ItemChan:  persist.ItemServer(),
+		ItemChan:  persist.ItemSaver(),
 	}
 	e.Run(request)
 	//resp, err := http.Get("http://www.zhenai.com/zhenghun")

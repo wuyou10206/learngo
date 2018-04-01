@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"time"
+	"golang.org/x/text/internal/catmsg"
 )
 
 type atomicInt struct {

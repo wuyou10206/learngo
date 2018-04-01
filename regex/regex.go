@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"regexp"
+	"fmt"
 )
 
 const text = `My email is ccmouse@gmail.com@abc.com
@@ -17,7 +17,6 @@ func main() {
 	match := re.FindAllStringSubmatch(text, -1)
 	//re.FindAllString(text, -1)
 	//re.FindString(text)
-
 	fmt.Println(match)
 
 }
