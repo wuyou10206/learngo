@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"gopkg.in/olivere/elastic.v5"
+	"learngo/crawler4/engine"
 	"learngo/crawler4/model"
 	"testing"
 )
@@ -24,7 +25,13 @@ func TestSave(t *testing.T) {
 		House:      "已购房",
 		Car:        "未购车",
 	}
-	id, err := save(profile)
+	item := engine.Item{
+		Url:     "http://1111111",
+		Type:    "zhenai",
+		Id:      "112233444",
+		Payload: profile,
+	}
+	err := save(item)
 	if err != nil {
 		panic(err)
 	}
@@ -32,17 +39,19 @@ func TestSave(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	resp, err := client.Get().Index("dating_profile").Type("zhenai").Id(id).Do(context.Background())
+	resp, err := client.Get().Index("dating_profile").Type(item.Type).Id(item.Id).Do(context.Background())
 	if err != nil {
 		panic(err)
 	}
 	t.Logf("%s", resp.Source)
-	var actual model.Profile
+	var actual engine.Item
 	err = json.Unmarshal(*resp.Source, &actual)
 	if err != nil {
 		panic(err)
 	}
-	if profile != actual {
+	actualProfile, _ := model.FromJsonToObject(actual.Payload)
+	actual.Payload = actualProfile
+	if item != actual {
 		t.Errorf("got %v ; expected %v", actual, profile)
 	}
 }

@@ -6,9 +6,16 @@ type Request struct {
 }
 type ParseResult struct {
 	Requests []Request
-	Items    []interface{}
+	Items    []Item
 }
 
 func NilParse([]byte) ParseResult {
 	return ParseResult{}
+}
+
+type Item struct {
+	Url     string
+	Id      string
+	Type    string
+	Payload interface{}
 }

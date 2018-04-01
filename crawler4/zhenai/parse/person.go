@@ -20,7 +20,9 @@ var hotelReg = regexp.MustCompile(`<td><span class="label">住房条件：</span
 var occupationReg = regexp.MustCompile(`<td><span class="label">职业： </span>([^<]*)</td>`)
 var educationReg = regexp.MustCompile(`<td><span class="label">学历：</span>([^<]*)</td>`)
 
-func ParsePerson(contents []byte, name string) engine.ParseResult {
+var idUrlReg = regexp.MustCompile(`href="http://album.zhenai.com/u/(\d+)"`)
+
+func ParsePerson(contents []byte, url string, name string) engine.ParseResult {
 	profile := model.Profile{}
 
 	age, err := strconv.Atoi(extractString(contents, ageReg))
@@ -47,7 +49,14 @@ func ParsePerson(contents []byte, name string) engine.ParseResult {
 	profile.Income = string(extractString(contents, salaryReg))
 
 	result := engine.ParseResult{}
-	result.Items = []interface{}{profile}
+	result.Items = []engine.Item{
+		{
+			Url:     url,
+			Type:    "zhenai",
+			Id:      extractString([]byte(url), idUrlReg),
+			Payload: profile,
+		},
+	}
 
 	return result
 }

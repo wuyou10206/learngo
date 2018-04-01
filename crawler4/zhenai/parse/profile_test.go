@@ -3,6 +3,7 @@ package parse
 import (
 	"io/ioutil"
 	"learngo/crawler/model"
+	"learngo/crawler4/engine"
 	"testing"
 )
 
@@ -13,12 +14,12 @@ func TestParsePerson(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	result := ParsePerson(contents, "风中的蒲公英照片")
+	result := ParsePerson(contents, "", "风中的蒲公英照片")
 
 	if len(result.Items) != 1 {
 		t.Errorf("实际 %d ,期望 %d", len(result.Items), 1)
 	}
-	profile := result.Items[0].(model.Profile)
+	profile := result.Items[0]
 	expected := model.Profile{
 		Name:       "风中的蒲公英照片",
 		Gender:     "女",
@@ -34,7 +35,13 @@ func TestParsePerson(t *testing.T) {
 		House:      "已购房",
 		Car:        "未购车",
 	}
-	if profile != expected {
+	item := engine.Item{
+		Url:     "http://1111111",
+		Type:    "zhenai",
+		Id:      "112233444",
+		Payload: expected,
+	}
+	if item != profile {
 		t.Errorf("实际 %v ,期望 %v", profile, expected)
 	}
 
